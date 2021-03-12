@@ -69,7 +69,6 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
     }
 }
 
-
 tasks.register<de.undercouch.gradle.tasks.download.Download>("download-openapi-spec") {
     this.src("https://raw.githubusercontent.com/tmforum-apis/TMF666_AccountManagement/master/TMF666-Account-v4.0.0.swagger.json")
     dest("${project.buildDir}/${tmfCode}-openapi-spec.json")
@@ -102,7 +101,6 @@ tasks.register<org.openapitools.generator.gradle.plugin.tasks.GenerateTask>("gen
         )
     }
 }
-
 
 tasks.getByName("generate").dependsOn("download-openapi-spec")
 tasks.getByName("compileKotlin").dependsOn("generate")
