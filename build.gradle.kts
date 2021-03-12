@@ -10,6 +10,8 @@ plugins {
 
     id("de.undercouch.download") version "4.1.1"
     id("org.openapi.generator") version "5.0.0"
+
+    `maven-publish`
 }
 
 group = "org.hshekhar"
@@ -23,6 +25,18 @@ sourceSets.getByName("main") {
     java.srcDirs(
         "${project.buildDir}/generated/src/main/kotlin"
     )
+}
+
+publishing {
+    publications {
+        create<MavenPublication>("maven") {
+            groupId = "${project.group}"
+            artifactId = "${project.name}"
+            version = "${project.version}"
+
+            from(components["java"])
+        }
+    }
 }
 
 repositories {

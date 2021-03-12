@@ -5,7 +5,7 @@ import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 
 /**
  * @created 3/12/2021'T'10:48 AM
- * @author Himanshu Shekhar (609080540)
+ * @author Himanshu Shekhar (himanshu.shekhar.in@gmail.com)
  **/
 
 val DATETIME_FORMAT = ""
