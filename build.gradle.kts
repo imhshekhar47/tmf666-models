@@ -11,6 +11,8 @@ plugins {
     id("de.undercouch.download") version "4.1.1"
     id("org.openapi.generator") version "5.0.0"
 
+    id ("org.sonarqube") version "3.2.0"
+
     `maven-publish`
 }
 
@@ -25,6 +27,13 @@ sourceSets.getByName("main") {
     java.srcDirs(
         "${project.buildDir}/generated/src/main/kotlin"
     )
+}
+
+sonarqube {
+    properties {
+        property("sonar.sourceEncoding", "UTF-8")
+        property("sonar.sources", "build/generated/src/main/kotlin")
+    }
 }
 
 publishing {
@@ -58,6 +67,7 @@ dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.4.2")
 }
+
 tasks.withType<Test> {
     useJUnitPlatform()
 }
