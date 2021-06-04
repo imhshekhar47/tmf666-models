@@ -19,7 +19,7 @@ plugins {
 }
 
 group = "org.hshekhar"
-version = "0.1.0"
+version = "0.1.0-SNAPSHOT"
 
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
@@ -50,10 +50,11 @@ publishing {
     }
     repositories {
         maven {
-            url = uri(System.getProperty("nexus.url")?: throw GradleException("Missing property for Nexus URL"))
+            val nexusUrl = project.findProperty("nexus.url")?: throw GradleException("Nexus releases URL not set")
+            url = uri(nexusUrl)
             credentials {
-                username = System.getProperty("nexus.username")?: throw GradleException("Missing property for Nexus Username")
-                password = System.getProperty("nexus.password")?: throw GradleException("Missing property for Nexus Password")
+                username = project.findProperty("nexus.username")?.toString()?:throw GradleException("Nexus username not set")
+                password = project.findProperty("nexus.password")?.toString()?:throw GradleException("Nexus password not set")
             }
         }
     }
