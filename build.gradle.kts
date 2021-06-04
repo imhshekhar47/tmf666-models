@@ -51,7 +51,11 @@ publishing {
     repositories {
         maven {
             val nexusUrl = project.findProperty("nexus.url")?: throw GradleException("Nexus releases URL not set")
-            url = uri(nexusUrl)
+            url = if ("${project.version}".toLowerCase().endsWith("-snapshot")) {
+                uri("$nexusUrl/repository/maven-snapshots/")
+            } else  {
+                uri("$nexusUrl/repository/maven-release/")
+            }
             credentials {
                 username = project.findProperty("nexus.username")?.toString()?:throw GradleException("Nexus username not set")
                 password = project.findProperty("nexus.password")?.toString()?:throw GradleException("Nexus password not set")

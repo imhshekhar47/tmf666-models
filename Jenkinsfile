@@ -18,7 +18,41 @@ pipeline {
         stage("build") {
             steps {
                 container("gradle") {
-                    sh './gradlew clean build'
+                    withSonarQubeEnv("SonarQube") {
+                        sh './gradlew clean build'
+                    }
+                }
+            }
+        }
+
+        stage("sonar-scan") {
+            steps {
+                container("gradle") {
+                    withSonarQubeEnv("SonarQube") {
+                        sh './gradlew sonarqube'
+                    }
+                }
+            }
+        }
+
+        stage("quality-gate") {
+            steps {
+                waitForQualityGate abortPipeline: true
+            }
+        }
+
+        stage("publish") {
+            environment {
+                NEXUS_URL = "${env.NEXUS_URL}/repository/maven-snapshots/"
+            }
+            steps {
+                echo "${PWD}"
+                container("gradle") {
+                    sh 'printenv'
+                    echo "${env.NEXUS_URL}"
+                    withCredentials([usernamePassword(credentialsId: 'nexus-access-credential', passwordVariable: 'password', usernameVariable: 'username')]) {
+                        sh "./gradlew publish -Pnexus.url=${env.NEXUS_URL} -Pnexus.username=${username} -Pnexus.password=${password} --info --stacktrace"
+                    }
                 }
             }
         }
