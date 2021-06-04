@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.tasks.throwGradleExceptionIfError
+
 val tmfCode = 666
 
 val kotlinVersion = project.properties["kotlinVersion"]
@@ -44,6 +46,15 @@ publishing {
             version = "${project.version}"
 
             from(components["java"])
+        }
+    }
+    repositories {
+        maven {
+            url = uri(System.getProperty("nexus.url")?: throw GradleException("Missing property for Nexus URL"))
+            credentials {
+                username = System.getProperty("nexus.username")?: throw GradleException("Missing property for Nexus Username")
+                password = System.getProperty("nexus.password")?: throw GradleException("Missing property for Nexus Password")
+            }
         }
     }
 }
